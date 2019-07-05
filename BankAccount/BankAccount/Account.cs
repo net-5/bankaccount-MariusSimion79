@@ -13,7 +13,7 @@ namespace BankAccount
     public class Account
     {
         public string AccNumber { get; }
-        public string Owner { get; }
+        public string OwnerName { get; }
         public Status Status { get; set; }
         public decimal Balance
         {
@@ -33,7 +33,7 @@ namespace BankAccount
         string Currency { get; }
         string OpeningDate { get; }
 
-        public void MakeDeposit(decimal amount, DateTime date, string observation)
+        public void MakeDeposit(decimal amount, string observation)
         {
             decimal balance = Balance;
             if (Status == Status.Open)
@@ -44,9 +44,10 @@ namespace BankAccount
                 }
                 else
                 {
+                    //de legat data
                     balance = +amount;
                 }
-                var deposit = new Transaction(amount, Currency, date, observation);
+                var deposit = new Transaction(amount, Currency, observation);
                 transactions.Add(deposit);
             }
             else
@@ -59,7 +60,7 @@ namespace BankAccount
 
         }
 
-        public void Withdrawal(decimal amount, DateTime date, string observation)
+        public void Withdrawal(decimal amount, string observation)
         {
             if (Status == Status.Open)
             {
@@ -74,9 +75,10 @@ namespace BankAccount
                 }
                 else
                 {
+                    // de legat data
                     amount = -amount;
                 }
-                var withdrawal = new Transaction(amount, Currency, date, observation);
+                var withdrawal = new Transaction(amount, Currency, observation);
                 transactions.Add(withdrawal);
             }
             else
@@ -90,14 +92,14 @@ namespace BankAccount
 
         }
 
-        public Account(string name)
+        public Account(string ownerName)
         {
             string country = "RO";
             int shortOpeningDate = DateTime.Now.Year % 100;
             this.OpeningDate = DateTime.Now.ToShortDateString();
             string shortBankName = "BRMA";
             this.Currency = "RON";
-            this.Owner = name;
+            this.OwnerName = ownerName;
 
             this.AccNumber = $"{country}{shortOpeningDate}{shortBankName}{accNo.ToString()}";
             accNo++;
@@ -114,7 +116,7 @@ namespace BankAccount
             if (Status == Status.Open)
             {
                 Console.WriteLine($"Detailed statement for the account no: {AccNumber}\n" +
-                          $"Account owned by: {Owner};\n" +
+                          $"Account owned by: {OwnerName};\n" +
                           $"Account currency: {Currency}\n" +
                           $"Account opening date: {OpeningDate}\n" +
                           $"Available amount: {Balance}{Currency}");
